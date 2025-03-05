@@ -20,9 +20,9 @@ exports.createTodo = async (req, res) => {
             return res.status(400).json({ errors: errors.array() });
         }
 
-        const { title, description, status } = req.body;
+        const { title, description, status, priority } = req.body;
 
-        const todo = new Todo({ title, description, status, userId: req.user.userId });
+        const todo = new Todo({ title, description, status, priority, userId: req.user.userId });
         console.log(todo);
         await todo.save();
 
@@ -87,6 +87,28 @@ exports.deleteTodo = async (req, res) => {
         res.status(500).json({ message: 'Todo silinemedi', error: error.message });
     }
 };
+
+exports.changeStatus = async (req, res) => {
+    try {
+        const todoId = req.params.id;
+        const { status } = req.body;
+
+        const todo = await Todo.findOneAndUpdate(
+            { _id: todoId },
+            { status },
+            { new: true }
+        );
+
+        if (!todo) {
+            return res.status(404).json({ message: 'Todo bulunamadı' });
+        }
+
+        res.status(200).json({ message: 'Todo durumu başarıyla güncellendi', todo });
+    } catch (error) {
+        console.error('Todo status güncellenirken hata:', error);
+        res.status(500).json({ message: 'Todo durumu güncellenirken bir hata oluştu' });
+    }
+}
 
 
 

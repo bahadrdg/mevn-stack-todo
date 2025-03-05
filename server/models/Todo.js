@@ -11,6 +11,11 @@ const todoSchema = new mongoose.Schema({
         required: [true, 'Açıklama zorunludur'],
         trim: true
     },
+    priority: {
+        type: String,
+        enum: ['low', 'medium', 'high'],
+        required: true
+    },
     status: {
         type: String,
         enum: ['start', 'progress', 'completed'],

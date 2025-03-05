@@ -23,7 +23,13 @@ const auth = require('../middleware/auth');
  *         description:
  *           type: string
  *           description: Todo açıklaması
- *
+ *         priority:
+ *           type: string
+ *           description: Todo'nun önceliği (low, medium, high)
+ *           enum:
+ *             - low
+ *             - medium
+ *             - high
  *         status:
  *           type: string
  *           description: Todo'nun durumu (start, progress, completed)
@@ -59,6 +65,13 @@ const auth = require('../middleware/auth');
  *                 - start
  *                 - progress
  *                 - completed
+ *             priority:
+ *               type: string
+ *               description: Todo'nun önceliği (low, medium, high)
+ *               enum:
+ *                 - low
+ *                 - medium
+ *                 - high
  *             userId:
  *               type: string
  *             createdAt:
@@ -275,6 +288,63 @@ router.put('/:id', auth, todoController.updateTodo);
  *               $ref: '#/components/schemas/Error'
  */
 router.delete('/:id', auth, todoController.deleteTodo);
+
+/**
+ * @swagger
+ * /api/todos/changeStatus/{id}:
+ *   post:
+ *     summary: Todo durumunu değiştir
+ *     tags: [Todo]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Todo ID'si
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               status:
+ *                 type: string
+ *                 enum:
+ *                   - start
+ *                   - progress
+ *                   - completed
+ *     responses:
+ *       200:
+ *         description: Todo durumu başarıyla güncellendi
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/TodoResponse'
+ *       401:
+ *         description: Yetkisiz
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       404:
+ *         description: Todo bulunamadı
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Sunucu hatası
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+router.post('/changeStatus/:id/', auth, todoController.changeStatus);
+
 
 module.exports = router;
 

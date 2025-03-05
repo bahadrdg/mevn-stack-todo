@@ -9,6 +9,7 @@
     },
     "dependencies": {
         "@primevue/themes": "^4.2.4",
+        "@syncfusion/ej2-vue-kanban": "^28.2.3",
         "axios": "^1.7.9",
         "chart.js": "3.3.2",
         "pinia": "^3.0.1",
